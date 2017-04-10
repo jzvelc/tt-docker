@@ -1,0 +1,59 @@
+version: "2.1"
+
+services:
+  redis:
+    image: redis:3.2.6-alpine
+    volumes:
+      - redis:/data
+    command: redis-server --appendonly yes
+    restart: always
+
+  proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    userns_mode: "host"
+    privileged: true
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  example:
+    image: jzvelc/example:latest
+    build: .
+    environment:
+      - REDIS_ADDR=redis:6379
+      - VIRTUAL_HOST=example.lan
+      - VIRTUAL_PORT=80
+    depends_on:
+      - redis
+    volumes:
+      - .:/data
+
+volumes:
+  redis:
+    driver: local
+  mysql:
+    driver: local
+  elasticsearch:
+    driver: local
+  mongo:
+    driver: local
+  revive-plugins:
+    driver: local
+  revive-var:
+    driver: local
+  revive-images:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.bridge.host_binding_ipv4: 172.40.20.1
+    ipam:
+      config:
+        - subnet: 172.40.20.0/16
+          gateway: 172.40.20.1
