@@ -1,0 +1,1 @@
+{{ .Env.REDIS_ADDR }}

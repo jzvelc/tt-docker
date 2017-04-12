@@ -13,6 +13,7 @@ RUN apk add --no-cache --repository http://dl-4.alpinelinux.org/alpine/v3.5/comm
 ADD dockerize-alpine-linux-amd64-v0.3.0.tar.gz /usr/local/bin/
 
 COPY entrypoint.sh /entrypoint.sh
+COPY template.tpl /template.tpl
 
 WORKDIR /data
 COPY server.js /data/server

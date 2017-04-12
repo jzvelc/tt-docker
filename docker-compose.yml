@@ -33,18 +33,6 @@ services:
 volumes:
   redis:
     driver: local
-  mysql:
-    driver: local
-  elasticsearch:
-    driver: local
-  mongo:
-    driver: local
-  revive-plugins:
-    driver: local
-  revive-var:
-    driver: local
-  revive-images:
-    driver: local
 
 networks:
   default:
